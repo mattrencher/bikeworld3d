@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BikeWorld3D - Navigate the City</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Three.js canvas will be inserted here -->
+    </div>
+    
+    <!-- Navigation hints overlay -->
+    <div id="ui-overlay">
+      <div class="nav-hint">Scroll to ride around the city</div>
+      <div class="building-name" id="building-name"></div>
+    </div>
+
+    <!-- Content overlay (hidden by default) -->
+    <div id="content-overlay" class="hidden">
+      <div class="content-container">
+        <button class="close-btn" id="close-btn">&times;</button>
+        <div class="content-body" id="content-body">
+          <!-- Dynamic content will be inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
