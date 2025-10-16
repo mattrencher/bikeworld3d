@@ -1,14 +1,14 @@
 // BikeWorld3D - Main entry point
-import './style.css';
-import { SceneSetup } from './scene/sceneSetup.js';
-import { Buildings } from './models/buildings.js';
-import { Path } from './models/path.js';
-import { Bike } from './models/bike.js';
-import { Rider } from './models/rider.js';
-import { Navigation } from './navigation/navigation.js';
-import { ScrollHandler } from './navigation/scrollHandler.js';
-import { MenuSystem } from './navigation/menuSystem.js';
-import { AnimationManager } from './utils/animations.js';
+import "./style.css";
+import { SceneSetup } from "./scene/sceneSetup.js";
+import { Buildings } from "./models/buildings.js";
+import { Path } from "./models/path.js";
+import { Bike } from "./models/bike.js";
+import { Rider } from "./models/rider.js";
+import { Navigation } from "./navigation/navigation.js";
+import { ScrollHandler } from "./navigation/scrollHandler.js";
+import { MenuSystem } from "./navigation/menuSystem.js";
+import { AnimationManager } from "./utils/animations.js";
 
 class BikeWorld3D {
   constructor() {
@@ -27,10 +27,10 @@ class BikeWorld3D {
    * Initialize the application
    */
   async init() {
-    console.log('🚴 Initializing BikeWorld3D...');
+    console.log("🚴 Initializing BikeWorld3D...");
 
     // Get container
-    const container = document.querySelector('#app');
+    const container = document.querySelector("#app");
 
     // Initialize scene
     this.sceneSetup = new SceneSetup();
@@ -45,9 +45,9 @@ class BikeWorld3D {
     // Start render loop
     this.animate();
 
-    console.log('✅ BikeWorld3D initialized successfully!');
-    console.log('📜 Scroll to navigate around the city');
-    console.log('🖱️ Click on buildings to view content');
+    console.log("✅ BikeWorld3D initialized successfully!");
+    console.log("📜 Scroll to navigate around the city");
+    console.log("🖱️ Click on buildings to view content");
   }
 
   /**
@@ -63,6 +63,24 @@ class BikeWorld3D {
     // Create buildings
     this.buildings = new Buildings(scene);
     this.buildings.create();
+
+    // Parent the path to the city group so it rotates together with buildings
+    // Remove the path from the root scene and add it under the city group
+    try {
+      const cityGroup = this.buildings.getCityGroup();
+      const pathGroup = this.path.getPathGroup();
+      // Ensure pathGroup exists
+      if (pathGroup && cityGroup) {
+        // Remove pathGroup from scene if it was added there in Path.create()
+        if (pathGroup.parent && pathGroup.parent.type === "Scene") {
+          pathGroup.parent.remove(pathGroup);
+        }
+        cityGroup.add(pathGroup);
+        console.log("\u2713 Path parented to city group");
+      }
+    } catch (err) {
+      console.warn("Could not parent path to city group:", err);
+    }
 
     // Create bike
     this.bike = new Bike(scene);
@@ -117,8 +135,8 @@ class BikeWorld3D {
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
     const app = new BikeWorld3D();
     app.init();
   });

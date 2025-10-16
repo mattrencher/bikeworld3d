@@ -18,7 +18,7 @@ export const CONFIG = {
   ],
 
   // Bike positioning
-  BIKE_POSITION: { x: 0, y: 1, z: 35 },
+  BIKE_POSITION: { x: 0, y: 0.3, z: 35 },
 
   // Camera settings
   CAMERA_POSITION: { x: 0, y: 20, z: 60 },
@@ -31,7 +31,7 @@ export const CONFIG = {
 
   // Path settings
   PATH_RADIUS: 35,
-  PATH_WIDTH: 6,
+  PATH_WIDTH: 7,
 
   // Interaction
   SNAP_THRESHOLD: 0.1, // Radians threshold for snapping to building

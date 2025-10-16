@@ -1,6 +1,6 @@
 // Scene setup and initialization for BikeWorld3D
-import * as THREE from 'three';
-import { CONFIG } from '../utils/constants.js';
+import * as THREE from "three";
+import { CONFIG } from "../utils/constants.js";
 
 export class SceneSetup {
   constructor() {
@@ -19,7 +19,7 @@ export class SceneSetup {
     // Create scene
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(CONFIG.SKY_COLOR);
-    this.scene.fog = new THREE.Fog(CONFIG.SKY_COLOR, 50, 200);
+    this.scene.fog = new THREE.Fog(CONFIG.SKY_COLOR, 40, 85);
 
     // Create camera
     const aspect = window.innerWidth / window.innerHeight;
@@ -37,15 +37,15 @@ export class SceneSetup {
     this.camera.lookAt(0, 0, 0);
 
     // Create renderer
-    this.renderer = new THREE.WebGLRenderer({ 
+    this.renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: false 
+      alpha: false,
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
+
     container.appendChild(this.renderer.domElement);
 
     // Add lights
@@ -55,9 +55,9 @@ export class SceneSetup {
     this.addGround();
 
     // Handle window resize
-    window.addEventListener('resize', () => this.onWindowResize());
+    window.addEventListener("resize", () => this.onWindowResize());
 
-    console.log('✓ Scene initialized');
+    console.log("✓ Scene initialized");
   }
 
   /**
@@ -65,20 +65,17 @@ export class SceneSetup {
    */
   addLights() {
     // Ambient light for general illumination
-    const ambientLight = new THREE.AmbientLight(
-      CONFIG.AMBIENT_LIGHT, 
-      0.6
-    );
+    const ambientLight = new THREE.AmbientLight(CONFIG.AMBIENT_LIGHT, 0.6);
     this.scene.add(ambientLight);
 
     // Directional light (sun)
     const directionalLight = new THREE.DirectionalLight(
-      CONFIG.DIRECTIONAL_LIGHT, 
+      CONFIG.DIRECTIONAL_LIGHT,
       0.8
     );
     directionalLight.position.set(50, 80, 40);
     directionalLight.castShadow = true;
-    
+
     // Shadow configuration
     directionalLight.shadow.camera.left = -100;
     directionalLight.shadow.camera.right = 100;
@@ -88,7 +85,7 @@ export class SceneSetup {
     directionalLight.shadow.camera.far = 200;
     directionalLight.shadow.mapSize.width = 2048;
     directionalLight.shadow.mapSize.height = 2048;
-    
+
     this.scene.add(directionalLight);
 
     // Add a subtle hemisphere light for more natural lighting
@@ -96,7 +93,7 @@ export class SceneSetup {
     hemiLight.position.set(0, 100, 0);
     this.scene.add(hemiLight);
 
-    console.log('✓ Lights added');
+    console.log("✓ Lights added");
   }
 
   /**
@@ -104,9 +101,9 @@ export class SceneSetup {
    */
   addGround() {
     const groundGeometry = new THREE.CircleGeometry(100, 32);
-    const groundMaterial = new THREE.MeshLambertMaterial({ 
+    const groundMaterial = new THREE.MeshLambertMaterial({
       color: CONFIG.GROUND_COLOR,
-      flatShading: true 
+      flatShading: true,
     });
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
     ground.rotation.x = -Math.PI / 2;
@@ -114,7 +111,7 @@ export class SceneSetup {
     ground.receiveShadow = true;
     this.scene.add(ground);
 
-    console.log('✓ Ground added');
+    console.log("✓ Ground added");
   }
 
   /**
