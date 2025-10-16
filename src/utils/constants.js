@@ -3,7 +3,7 @@
 export const CONFIG = {
   // Building settings
   BUILDING_COUNT: 8,
-  CITY_RADIUS: 40,
+  CITY_RADIUS: 25,
   
   // Building names and colors (low-poly aesthetic)
   BUILDINGS: [
@@ -21,17 +21,17 @@ export const CONFIG = {
   BIKE_POSITION: { x: 0, y: 1, z: 35 },
   
   // Camera settings
-  CAMERA_POSITION: { x: 0, y: 35, z: 60 },
+  CAMERA_POSITION: { x: 0, y: 20, z: 60 },
   CAMERA_FOV: 60,
   
   // Animation settings
-  ROTATION_SPEED: 0.02,
+  ROTATION_SPEED: 0.22,
   ROTATION_SMOOTHING: 0.1,
   WHEEL_ROTATION_SPEED: 0.15,
   
   // Path settings
   PATH_RADIUS: 35,
-  PATH_WIDTH: 4,
+  PATH_WIDTH: 6,
   
   // Interaction
   SNAP_THRESHOLD: 0.1, // Radians threshold for snapping to building
