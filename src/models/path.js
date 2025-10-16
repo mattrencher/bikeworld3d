@@ -35,8 +35,9 @@ export class Path {
     // Add lane markings (dashed white lines)
     this.addLaneMarkings();
 
-    this.scene.add(this.pathGroup);
-    console.log("✓ Path created");
+    // Do not add pathGroup to the scene here.
+    // The caller should add or parent the pathGroup (for example, under the buildings' city group)
+    console.log("✓ Path created (not added to scene)");
   }
 
   /**
