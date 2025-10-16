@@ -1,16 +1,16 @@
 // Navigation controller - manages city rotation and position tracking
-import { CONFIG } from '../utils/constants.js';
+import { CONFIG } from "../utils/constants.js";
 
 export class Navigation {
   constructor(cityGroup, buildings) {
     this.cityGroup = cityGroup;
     this.buildings = buildings;
-    
+
     this.currentRotation = 0;
     this.targetRotation = 0;
     this.currentBuildingIndex = 0;
     this.isRotating = false;
-    
+
     this.scrollAccumulator = 0;
   }
 
@@ -21,7 +21,7 @@ export class Navigation {
   handleScroll(delta) {
     // Normalize delta and apply to rotation
     const normalizedDelta = delta * CONFIG.ROTATION_SPEED;
-    this.targetRotation += normalizedDelta;
+    this.targetRotation -= normalizedDelta;
     this.isRotating = true;
   }
 
@@ -31,9 +31,11 @@ export class Navigation {
   update() {
     if (Math.abs(this.targetRotation - this.currentRotation) > 0.001) {
       // Smooth interpolation (lerp)
-      this.currentRotation += (this.targetRotation - this.currentRotation) * CONFIG.ROTATION_SMOOTHING;
+      this.currentRotation +=
+        (this.targetRotation - this.currentRotation) *
+        CONFIG.ROTATION_SMOOTHING;
       this.cityGroup.rotation.y = this.currentRotation;
-      
+
       // Update building index based on rotation
       this.updateBuildingIndex();
     } else {
