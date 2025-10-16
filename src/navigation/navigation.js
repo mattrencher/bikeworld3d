@@ -42,7 +42,7 @@ export class Navigation {
   }
 
   /**
-   * Calculate which building is currently in front
+   * Calculate which building is currently in front (closest to bike at positive Z)
    */
   updateBuildingIndex() {
     // Normalize rotation to 0-2π range
@@ -52,8 +52,11 @@ export class Navigation {
     }
 
     // Calculate building index
+    // Offset by PI/2 to align with the bike's position (at positive Z axis, facing right)
+    // This makes the building directly in front of the bike the active one
     const anglePerBuilding = (Math.PI * 2) / CONFIG.BUILDING_COUNT;
-    const rawIndex = Math.round(normalizedRotation / anglePerBuilding);
+    const adjustedRotation = normalizedRotation + Math.PI / 2;
+    const rawIndex = Math.round(adjustedRotation / anglePerBuilding);
     this.currentBuildingIndex = rawIndex % CONFIG.BUILDING_COUNT;
   }
 

@@ -85,8 +85,9 @@ export class Buildings {
     // Position the building group
     buildingGroup.position.set(x, 0, z);
     
-    // Rotate building to face center
+    // Rotate building to face outward (away from center)
     buildingGroup.lookAt(0, 0, 0);
+    buildingGroup.rotateY(Math.PI); // Rotate 180 degrees to face outward
 
     return buildingGroup;
   }

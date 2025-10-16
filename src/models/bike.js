@@ -58,7 +58,7 @@ export class Bike {
       new THREE.BoxGeometry(0.15, 1, 0.15),
       frameMaterial
     );
-    seatTube.position.set(0, 1.5, -1.2);
+    seatTube.position.set(0, 1.5, -.8);
     seatTube.castShadow = true;
     this.bikeGroup.add(seatTube);
 
@@ -77,7 +77,7 @@ export class Bike {
       new THREE.BoxGeometry(0.6, 0.2, 0.8),
       new THREE.MeshLambertMaterial({ color: 0x000000, flatShading: true })
     );
-    seat.position.set(0, 2.3, -1.2);
+    seat.position.set(0, 2.3, -.8);
     seat.castShadow = true;
     this.bikeGroup.add(seat);
 
@@ -106,8 +106,9 @@ export class Bike {
       CONFIG.BIKE_POSITION.z
     );
 
-    // Rotate bike to face the correct direction (forward)
-    this.bikeGroup.rotation.y = Math.PI;
+    // Rotate bike to face right (tangent to the circular path)
+    // -Math.PI / 2 = -90 degrees = facing right
+    this.bikeGroup.rotation.y = Math.PI / 2;
 
     this.scene.add(this.bikeGroup);
     console.log('✓ Bike created');
@@ -132,7 +133,7 @@ export class Bike {
    */
   animateWheels(speed) {
     this.wheels.forEach(wheel => {
-      wheel.rotation.y += speed;
+      wheel.rotation.x += speed;
     });
   }
 }
