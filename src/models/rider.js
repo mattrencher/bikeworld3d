@@ -1,5 +1,5 @@
 // Rider model - Low poly humanoid figure
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export class Rider {
   constructor(scene, bikeGroup) {
@@ -14,16 +14,16 @@ export class Rider {
    * Create the rider
    */
   create() {
-    const skinColor = 0xFFDBAC;
-    const clothesColor = 0x2E5090;
-    
-    const skinMaterial = new THREE.MeshLambertMaterial({ 
+    const skinColor = 0xffdbac;
+    const clothesColor = 0x2e5090;
+
+    const skinMaterial = new THREE.MeshLambertMaterial({
       color: skinColor,
-      flatShading: true 
+      flatShading: true,
     });
-    const clothesMaterial = new THREE.MeshLambertMaterial({ 
+    const clothesMaterial = new THREE.MeshLambertMaterial({
       color: clothesColor,
-      flatShading: true 
+      flatShading: true,
     });
 
     // Torso
@@ -45,26 +45,58 @@ export class Rider {
     head.castShadow = true;
     this.riderGroup.add(head);
 
-    // Helmet
-    const helmet = new THREE.Mesh(
-      new THREE.SphereGeometry(0.4, 8, 6),
-      new THREE.MeshLambertMaterial({ color: 0xFF3333, flatShading: true })
+    // Eyes - solid black ovals
+    const eyeMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const eyeGeometry = new THREE.SphereGeometry(0.08, 8, 8);
+
+    // Left eye
+    const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+    leftEye.scale.set(1, 1.3, 0.6); // Make it oval
+    leftEye.position.set(0.15, 3.85, -0.4);
+    this.riderGroup.add(leftEye);
+
+    // Right eye
+    const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+    rightEye.scale.set(1, 1.3, 0.6); // Make it oval
+    rightEye.position.set(-0.15, 3.85, -0.4);
+    this.riderGroup.add(rightEye);
+
+    // Ball Cap - basic baseball cap
+    const capMaterial = new THREE.MeshLambertMaterial({
+      color: 0xff3333,
+      flatShading: true,
+    });
+
+    // Cap crown (rounded top)
+    const capCrown = new THREE.Mesh(
+      new THREE.SphereGeometry(0.4, 8, 8),
+      capMaterial
     );
-    helmet.position.set(0, 4.1, -0.7);
-    helmet.scale.set(1, 0.8, 1.1);
-    helmet.castShadow = true;
-    this.riderGroup.add(helmet);
+    capCrown.scale.set(1.3, 0.8, 1.3); // Scale up to fit on head
+    capCrown.position.set(0, 4.25, -0.7); // Position higher to sit on top
+    capCrown.castShadow = true;
+    this.riderGroup.add(capCrown);
+
+    // Cap brim (visor)
+    const capBrim = new THREE.Mesh(
+      new THREE.BoxGeometry(0.55, 0.05, 0.7),
+      capMaterial
+    );
+    capBrim.position.set(0, 4.05, -0.35); // Adjusted forward position for longer brim
+    capBrim.rotation.x = -Math.PI / 8; // Slight downward angle
+    capBrim.castShadow = true;
+    this.riderGroup.add(capBrim);
 
     // Arms
     const armGeometry = new THREE.BoxGeometry(0.2, 0.9, 0.2);
-    
+
     // Left arm
     const leftArm = new THREE.Mesh(armGeometry, skinMaterial);
     leftArm.position.set(0.5, 2.8, -0.5);
     leftArm.rotation.x = Math.PI / 4;
     leftArm.castShadow = true;
     this.riderGroup.add(leftArm);
-    
+
     // Right arm
     const rightArm = new THREE.Mesh(armGeometry, skinMaterial);
     rightArm.position.set(-0.5, 2.8, -0.5);
@@ -74,14 +106,14 @@ export class Rider {
 
     // Legs (for pedaling animation)
     const legGeometry = new THREE.BoxGeometry(0.25, 0.8, 0.25);
-    
+
     // Left leg
     const leftLeg = new THREE.Mesh(legGeometry, clothesMaterial);
     leftLeg.position.set(0.25, 1.8, -0.8);
     leftLeg.castShadow = true;
     this.legs.push(leftLeg);
     this.riderGroup.add(leftLeg);
-    
+
     // Right leg
     const rightLeg = new THREE.Mesh(legGeometry, clothesMaterial);
     rightLeg.position.set(-0.25, 1.8, -0.8);
@@ -91,8 +123,8 @@ export class Rider {
 
     // Add rider to bike group so it moves with the bike
     this.bikeGroup.add(this.riderGroup);
-    
-    console.log('✓ Rider created');
+
+    console.log("✓ Rider created");
   }
 
   /**

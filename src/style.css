@@ -7,7 +7,7 @@
 }
 
 :root {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   font-weight: 400;
   color: #ffffff;
@@ -77,6 +77,34 @@ canvas {
 
 .building-name.visible {
   opacity: 1;
+}
+
+/* Inspector Link */
+#inspector-link {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(74, 144, 226, 0.9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  z-index: 100;
+  pointer-events: auto;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  font-size: 14px;
+}
+
+#inspector-link:hover {
+  background: rgba(74, 144, 226, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+#inspector-link:active {
+  transform: translateY(0);
 }
 
 /* Content Overlay */

@@ -1,11 +1,13 @@
 # BikeWorld3D - GitHub Copilot Instructions
 
 ## Project Overview
+
 BikeWorld3D is an interactive 3D website built with Three.js featuring a bike rider navigating around a circular city. The bike serves as the main navigation mechanism with scroll wheel control, and 8 buildings represent different menu sections that can be clicked to display content.
 
 ---
 
 ## Core Technologies
+
 - **Three.js** (v0.x): 3D rendering and scene management
 - **JavaScript**: ES6+ modules (no frameworks)
 - **Vite**: Build tool and development server
@@ -16,6 +18,7 @@ BikeWorld3D is an interactive 3D website built with Three.js featuring a bike ri
 ## Project Architecture
 
 ### Directory Structure
+
 ```
 bikeworld3d/
 ├── index.html                    # Main HTML with UI overlays
@@ -45,12 +48,14 @@ bikeworld3d/
 ## Key Design Decisions
 
 ### 1. Low-Poly Aesthetic
+
 - All 3D models use simple geometric primitives (boxes, cylinders, cones, spheres)
 - Flat shading enabled for stylized appearance
 - Bright, distinct colors for each building
 - Minimal polygon count for performance
 
 ### 2. Navigation System
+
 - **Scroll down** = Move right (clockwise rotation)
 - **Scroll up** = Move left (counter-clockwise rotation)
 - City rotates while bike stays stationary (creates illusion of movement)
@@ -58,6 +63,7 @@ bikeworld3d/
 - Active building tracked by rotation angle with offset adjustment
 
 ### 3. Coordinate System
+
 - **Origin (0,0,0)**: Center of the city
 - **Positive Z axis**: Where bike is positioned (facing right)
 - **Y axis**: Up/down (height)
@@ -65,6 +71,7 @@ bikeworld3d/
 - **Buildings**: Positioned in circle, facing outward (180° rotation after lookAt)
 
 ### 4. Building Selection Logic
+
 - Rotation offset of `Math.PI / 2` aligns selection with bike position
 - Front-most building (directly in front of bike) is highlighted
 - Raycasting used for click detection
@@ -75,6 +82,7 @@ bikeworld3d/
 ## Configuration Constants (src/utils/constants.js)
 
 ### Key Settings
+
 ```javascript
 BUILDING_COUNT: 8              // Number of buildings in city
 CITY_RADIUS: 25               // Distance of buildings from center
@@ -88,6 +96,7 @@ HIGHLIGHT_SCALE: 1.1          // Building scale when selected
 ```
 
 ### Building Data Structure
+
 ```javascript
 BUILDINGS: [
   { name: 'Section Name', color: 0xHEXCOLOR, height: number }
@@ -100,6 +109,7 @@ BUILDINGS: [
 ## Code Style Guidelines
 
 ### ES6+ Features
+
 - Use ES6 modules (`import`/`export`)
 - Arrow functions for callbacks
 - Destructuring where appropriate
@@ -107,13 +117,16 @@ BUILDINGS: [
 - `const`/`let` (never `var`)
 
 ### Naming Conventions
+
 - **Classes**: PascalCase (`SceneSetup`, `Buildings`)
 - **Variables/Functions**: camelCase (`currentRotation`, `updateBuildingIndex`)
 - **Constants**: UPPER_SNAKE_CASE (`BUILDING_COUNT`, `CITY_RADIUS`)
 - **Private methods**: Prefix with underscore if needed (`_helper`)
 
 ### Function Documentation
+
 Use JSDoc comments for public methods:
+
 ```javascript
 /**
  * Brief description of what the function does
@@ -123,6 +136,7 @@ Use JSDoc comments for public methods:
 ```
 
 ### Error Handling
+
 - Add console logs for initialization steps with ✓ prefix
 - Validate user input where applicable
 - Handle edge cases (division by zero, null checks)
@@ -132,6 +146,7 @@ Use JSDoc comments for public methods:
 ## Three.js Specific Patterns
 
 ### Scene Setup
+
 1. Create scene with background color and fog
 2. Setup camera with aspect ratio handling
 3. Create renderer with antialiasing and shadows
@@ -140,6 +155,7 @@ Use JSDoc comments for public methods:
 6. Implement render loop with `requestAnimationFrame`
 
 ### Model Creation Pattern
+
 ```javascript
 export class ModelName {
   constructor(scene) {
@@ -152,7 +168,7 @@ export class ModelName {
     // Build mesh hierarchy
     // Position and rotate
     // Add to scene
-    console.log('✓ ModelName created');
+    console.log("✓ ModelName created");
   }
 
   getGroup() {
@@ -162,13 +178,15 @@ export class ModelName {
 ```
 
 ### Material Standards
+
 - Use `MeshLambertMaterial` for most objects (performance-friendly)
 - Enable `flatShading: true` for low-poly aesthetic
 - Set `castShadow: true` and `receiveShadow: true` appropriately
 - Use `emissive` and `emissiveIntensity` for highlights
 
 ### Rotation Conventions
-- **Bike facing right**: `rotation.y = -Math.PI / 2` (-90°)
+
+- **Bike facing right**
 - **Buildings facing outward**: `lookAt(0,0,0)` then `rotateY(Math.PI)`
 - **Wheel rolling**: Rotate on X axis (`rotation.x += speed`)
 
@@ -177,14 +195,17 @@ export class ModelName {
 ## Animation Guidelines
 
 ### Smooth Interpolation (Lerp)
+
 ```javascript
 current += (target - current) * smoothingFactor;
 ```
+
 - Used for city rotation (smoothing = 0.1)
 - Used for wheel speed transitions
 - Lower factor = smoother but slower
 
 ### Animation Coordination
+
 - All animations updated in main animation loop
 - Check `isMoving` state before animating wheels/rider
 - Sync wheel speed with rotation speed
@@ -195,11 +216,13 @@ current += (target - current) * smoothingFactor;
 ## UI Overlay System
 
 ### HTML Structure
+
 - `#app`: Canvas container
 - `#ui-overlay`: Non-interactive overlays (hints, building names)
 - `#content-overlay`: Interactive modal for building content
 
 ### CSS Patterns
+
 - Use `position: fixed` for overlays
 - `pointer-events: none` for non-interactive elements
 - Glassmorphism: `backdrop-filter: blur(10px)` + `rgba()` backgrounds
@@ -207,6 +230,7 @@ current += (target - current) * smoothingFactor;
 - `.visible` class toggles opacity for show/hide
 
 ### Content Display
+
 1. User clicks building (raycasting detects)
 2. Show overlay: Remove `.hidden`, add `.visible`
 3. Populate content from `CONTENT` object
@@ -217,6 +241,7 @@ current += (target - current) * smoothingFactor;
 ## Performance Considerations
 
 ### Optimization Techniques
+
 - Keep polygon count low (use simple primitives)
 - Limit shadow-casting lights (one directional light)
 - Use appropriate shadow map size (2048x2048)
@@ -224,6 +249,7 @@ current += (target - current) * smoothingFactor;
 - No instanced meshes needed for 8 buildings (small count)
 
 ### Target Performance
+
 - **60 FPS** on mid-range desktop
 - Smooth rotation with no stuttering
 - Instant click response
@@ -234,21 +260,25 @@ current += (target - current) * smoothingFactor;
 ## Common Tasks & Patterns
 
 ### Adding a New Building
+
 1. Add to `CONFIG.BUILDINGS` array in `constants.js`
 2. Add content to `CONTENT` object
 3. Update `BUILDING_COUNT` if needed
 4. Buildings auto-position based on count
 
 ### Changing Navigation Speed
+
 - Adjust `ROTATION_SPEED` in constants.js (higher = faster)
 - Adjust `ROTATION_SMOOTHING` (lower = smoother but slower response)
 
 ### Modifying Camera View
+
 - Change `CAMERA_POSITION` for different angles
 - Adjust `CAMERA_FOV` for zoom (lower = more zoomed in)
 - Update `lookAt(0, 0, 0)` to change focus point
 
 ### Adding New Animations
+
 1. Create animation method in respective model class
 2. Add to `AnimationManager.update()` in animations.js
 3. Sync with movement state if needed
@@ -258,17 +288,20 @@ current += (target - current) * smoothingFactor;
 ## Debugging Tips
 
 ### Console Logs
+
 - Initialization steps marked with ✓ prefix
 - Building selection logs with 📄 emoji
 - Use browser console to check for errors
 
 ### Common Issues
+
 - **Buildings not highlighting correctly**: Check rotation offset in `updateBuildingIndex()`
 - **Wheels not spinning**: Verify `animateWheels()` uses correct axis (X axis)
 - **Bike facing wrong way**: Should be `rotation.y = -Math.PI / 2`
 - **Buildings facing inward**: Must apply `rotateY(Math.PI)` after `lookAt()`
 
 ### Development Tools
+
 - Vite dev server: `npm run dev`
 - Hot module reload enabled
 - Check browser console for Three.js warnings
@@ -278,18 +311,21 @@ current += (target - current) * smoothingFactor;
 ## Extension Points
 
 ### Easy Additions
+
 - **Keyboard controls**: Add arrow key listeners in new file
 - **Sounds**: Add Web Audio API integration
 - **Particle effects**: Create particle system for ambient effects
 - **Day/night cycle**: Animate light colors and intensities
 
 ### Medium Complexity
+
 - **Better models**: Replace with GLTF models (use GLTFLoader)
 - **Mobile support**: Add touch event handlers
 - **Loading screen**: Add progress tracking for assets
 - **Mini-map**: Create 2D overlay showing position
 
 ### Advanced Features
+
 - **Multiple levels**: Create different city layouts
 - **Physics**: Add collision detection
 - **Multiplayer**: WebSocket integration for shared experience
@@ -300,6 +336,7 @@ current += (target - current) * smoothingFactor;
 ## Testing Checklist
 
 ### Functionality
+
 - [ ] Scroll up/down rotates city correctly
 - [ ] Front-most building is highlighted
 - [ ] Building name displays correctly
@@ -310,6 +347,7 @@ current += (target - current) * smoothingFactor;
 - [ ] Click outside content closes overlay
 
 ### Visual Quality
+
 - [ ] Buildings face outward (windows visible)
 - [ ] Bike faces right
 - [ ] Wheels rotate correctly (rolling motion)
@@ -319,6 +357,7 @@ current += (target - current) * smoothingFactor;
 - [ ] UI overlays have proper styling
 
 ### Performance
+
 - [ ] Maintains 60 FPS during rotation
 - [ ] No lag when clicking buildings
 - [ ] Smooth wheel animations
@@ -329,6 +368,7 @@ current += (target - current) * smoothingFactor;
 ## Known Limitations
 
 ### Current Constraints
+
 - Desktop-only (no mobile optimization)
 - No keyboard navigation
 - Simple geometric models (no detailed meshes)
@@ -336,6 +376,7 @@ current += (target - current) * smoothingFactor;
 - Single camera view (no orbit controls)
 
 ### Future Considerations
+
 - Add WebGL capability detection
 - Implement fallback for older browsers
 - Add loading progress indicator
@@ -346,17 +387,20 @@ current += (target - current) * smoothingFactor;
 ## Build & Deploy
 
 ### Development
+
 ```bash
 npm run dev          # Start dev server (http://localhost:5173)
 ```
 
 ### Production
+
 ```bash
 npm run build        # Build for production (outputs to /dist)
 npm run preview      # Preview production build
 ```
 
 ### Deployment
+
 - Static site (no server required)
 - Deploy `/dist` folder to any static host
 - No environment variables needed
@@ -367,11 +411,13 @@ npm run preview      # Preview production build
 ## Useful Resources
 
 ### Three.js Documentation
+
 - Main docs: https://threejs.org/docs/
 - Examples: https://threejs.org/examples/
 - Editor: https://threejs.org/editor/
 
 ### Project Files
+
 - Configuration: `src/utils/constants.js`
 - Main entry: `src/main.js`
 - Scene setup: `src/scene/sceneSetup.js`
@@ -381,6 +427,7 @@ npm run preview      # Preview production build
 ## Code Generation Guidelines
 
 ### When Creating New Features
+
 1. Follow existing file structure and patterns
 2. Use ES6 class syntax for components
 3. Add to appropriate directory (models/, navigation/, utils/)
@@ -390,6 +437,7 @@ npm run preview      # Preview production build
 7. Add console.log for initialization confirmation
 
 ### When Modifying Existing Code
+
 1. Check constants.js before hardcoding values
 2. Maintain consistent naming conventions
 3. Preserve existing animation coordination
@@ -398,6 +446,7 @@ npm run preview      # Preview production build
 6. Ensure performance not degraded
 
 ### When Fixing Bugs
+
 1. Check coordinate system and rotations first
 2. Verify axis conventions (Y=up, Z=forward for bike)
 3. Test with console.log to track values
@@ -410,6 +459,7 @@ npm run preview      # Preview production build
 ## Final Notes
 
 This is an MVP (Minimum Viable Product) implementation focused on:
+
 - ✅ Core functionality working smoothly
 - ✅ Clean, maintainable code structure
 - ✅ Low-poly aesthetic achieved

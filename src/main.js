@@ -57,7 +57,7 @@ class BikeWorld3D {
     const scene = this.sceneSetup.getScene();
 
     // Create path
-    this.path = new Path(scene);
+    this.path = new Path();
     this.path.create();
 
     // Create buildings
@@ -69,12 +69,8 @@ class BikeWorld3D {
     try {
       const cityGroup = this.buildings.getCityGroup();
       const pathGroup = this.path.getPathGroup();
-      // Ensure pathGroup exists
+      // Ensure pathGroup exists and add it under the city group so it rotates with buildings
       if (pathGroup && cityGroup) {
-        // Remove pathGroup from scene if it was added there in Path.create()
-        if (pathGroup.parent && pathGroup.parent.type === "Scene") {
-          pathGroup.parent.remove(pathGroup);
-        }
         cityGroup.add(pathGroup);
         console.log("\u2713 Path parented to city group");
       }
