@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="100%" height="100%" fill="#1a1a1a"/>
+  <g transform="translate(80,60)">
+    <rect x="0" y="0" width="480" height="240" rx="8" fill="#111" opacity="0.6"/>
+    <text x="240" y="30" fill="#fff" font-size="16" font-family="sans-serif" text-anchor="middle">Inspector Demo (placeholder)</text>
+
+    <!-- simple rotating bike silhouette animation -->
+    <g id="bike" transform="translate(240,120) scale(0.9)">
+      <g id="bike-body" transform="translate(-40,-10)">
+        <ellipse cx="0" cy="20" rx="40" ry="18" fill="#FF3333"/>
+        <rect x="-40" y="8" width="80" height="6" fill="#222"/>
+      </g>
+      <g id="wheel-left" transform="translate(-60,40)">
+        <circle r="18" fill="#222"/>
+      </g>
+      <g id="wheel-right" transform="translate(60,40)">
+        <circle r="18" fill="#222"/>
+      </g>
+    </g>
+
+    <animateTransform xlink:href="#bike" attributeName="transform" type="rotate" from="0 240 120" to="360 240 120" dur="4s" repeatCount="indefinite"/>
+
+    <text x="240" y="220" fill="#aaa" font-size="12" font-family="sans-serif" text-anchor="middle">Left-click to rotate • Scroll to zoom • R to reset</text>
+  </g>
+</svg>
