@@ -65,17 +65,36 @@ export class Rider {
     const capMaterial = new THREE.MeshLambertMaterial({
       color: 0xff3333,
       flatShading: true,
+      side: THREE.DoubleSide,
     });
 
     // Cap crown (rounded top)
-    const capCrown = new THREE.Mesh(
-      new THREE.SphereGeometry(0.4, 8, 8),
+    // const capCrown = new THREE.Mesh(
+    //   new THREE.SphereGeometry(0.4, 8, 8),
+    //   capMaterial
+    // );
+    // capCrown.scale.set(1.3, 0.8, 1.3); // Scale up to fit on head
+    // capCrown.position.set(0, 4.25, -0.7); // Position higher to sit on top
+    // capCrown.castShadow = true;
+    // this.riderGroup.add(capCrown);
+
+    const hatDome = new THREE.Mesh(
+      new THREE.SphereGeometry(
+        0.7,
+        50,
+        20,
+        Math.PI * 0.34,
+        Math.PI * 2.0,
+        Math.PI * 0.99,
+        Math.PI * 0.6
+      ),
       capMaterial
     );
-    capCrown.scale.set(1.3, 0.8, 1.3); // Scale up to fit on head
-    capCrown.position.set(0, 4.25, -0.7); // Position higher to sit on top
-    capCrown.castShadow = true;
-    this.riderGroup.add(capCrown);
+    const hatScale = 0.65;
+    hatDome.scale.set(hatScale, -hatScale * 0.8, hatScale); // Scale up to fit on head
+    hatDome.position.set(0, 4.13, -0.7); // Position higher to sit on top
+    // hatDome.castShadow = true;
+    this.riderGroup.add(hatDome);
 
     // Cap brim (visor)
     const capBrim = new THREE.Mesh(
@@ -88,19 +107,19 @@ export class Rider {
     this.riderGroup.add(capBrim);
 
     // Arms
-    const armGeometry = new THREE.BoxGeometry(0.2, 0.9, 0.2);
+    const armGeometry = new THREE.BoxGeometry(0.2, 1.2, 0.2);
 
     // Left arm
     const leftArm = new THREE.Mesh(armGeometry, skinMaterial);
-    leftArm.position.set(0.5, 2.8, -0.5);
-    leftArm.rotation.x = Math.PI / 4;
+    leftArm.position.set(0.5, 3.1, -0.3);
+    leftArm.rotation.x = Math.PI / -2.7;
     leftArm.castShadow = true;
     this.riderGroup.add(leftArm);
 
     // Right arm
     const rightArm = new THREE.Mesh(armGeometry, skinMaterial);
-    rightArm.position.set(-0.5, 2.8, -0.5);
-    rightArm.rotation.x = Math.PI / 4;
+    rightArm.position.set(-0.5, 3.1, -0.3);
+    rightArm.rotation.x = Math.PI / -2.7;
     rightArm.castShadow = true;
     this.riderGroup.add(rightArm);
 

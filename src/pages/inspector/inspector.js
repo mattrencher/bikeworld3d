@@ -3,12 +3,14 @@ import "./inspector.css";
 import { InspectorScene } from "./inspectorScene.js";
 import { ModelLoader } from "./modelLoader.js";
 
+const defaultModel = "bike";
+
 class ModelInspector {
   constructor() {
     this.scene = null;
     this.modelLoader = null;
     this.currentModel = null;
-    this.currentModelName = "bike";
+    this.currentModelName = defaultModel;
 
     // UI elements
     this.modelDropdown = null;
@@ -39,8 +41,8 @@ class ModelInspector {
     // Setup UI
     this.setupUI();
 
-    // Load default model (bike)
-    this.loadModel("bike");
+    // Load default model
+    this.loadModel(defaultModel);
 
     // Start render loop
     this.animate();
@@ -88,7 +90,7 @@ class ModelInspector {
 
     // Find the rider option to insert buildings after it
     const riderOption = Array.from(this.modelDropdown.options).find(
-      (opt) => opt.value === "rider"
+      (opt) => opt.value === defaultModel
     );
 
     // Add all building options
