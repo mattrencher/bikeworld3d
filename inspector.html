@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BikeWorld3D - Model Inspector</title>
+  </head>
+  <body>
+    <div id="inspector-app"></div>
+
+    <!-- UI Overlay -->
+    <div id="inspector-ui">
+      <!-- Model Selector Sidebar -->
+      <div id="model-selector">
+        <h2>Select Model</h2>
+        <select id="model-dropdown">
+          <option value="bike">Bike</option>
+          <option value="rider">Rider</option>
+          <!-- Buildings will be populated dynamically -->
+          <option value="path">Path</option>
+        </select>
+      </div>
+
+      <!-- Info Panel -->
+      <div id="model-info">
+        <h3 id="model-name">Bike</h3>
+        <p id="model-details">Vertices: 0 | Triangles: 0</p>
+      </div>
+
+      <!-- Controls Hint -->
+      <div id="controls-hint">
+        <p><strong>Controls:</strong></p>
+        <p>🖱️ Left Mouse: Rotate</p>
+        <p>🖱️ Right Mouse: Pan</p>
+        <p>🖱️ Scroll: Zoom</p>
+        <p>⌨️ R: Reset Camera</p>
+      </div>
+
+      <!-- Navigation -->
+      <a href="/" id="back-link">← Back to App</a>
+    </div>
+
+    <script type="module" src="/src/pages/inspector/inspector.js"></script>
+  </body>
+</html>
