@@ -1,6 +1,6 @@
 // Bike model - Low poly bicycle
-import * as THREE from 'three';
-import { CONFIG } from '../utils/constants.js';
+import * as THREE from "three";
+import { CONFIG } from "../utils/constants.js";
 
 export class Bike {
   constructor(scene) {
@@ -14,23 +14,28 @@ export class Bike {
    */
   create() {
     // Bike frame color
-    const frameColor = 0xFF3333;
-    const frameMaterial = new THREE.MeshLambertMaterial({ 
+    const frameColor = 0xffa500;
+    const frameMaterial = new THREE.MeshLambertMaterial({
       color: frameColor,
-      flatShading: true 
+      flatShading: true,
+    });
+    const accentColor = 0xc0c0c0;
+    const accentMaterial = new THREE.MeshLambertMaterial({
+      color: accentColor,
+      flatShading: true,
     });
 
     // Wheels
     const wheelGeometry = new THREE.CylinderGeometry(0.8, 0.8, 0.2, 16);
-    const wheelMaterial = new THREE.MeshLambertMaterial({ 
+    const wheelMaterial = new THREE.MeshLambertMaterial({
       color: 0x222222,
-      flatShading: true 
+      flatShading: true,
     });
 
     // Front wheel
     const frontWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
     frontWheel.rotation.z = Math.PI / 2;
-    frontWheel.position.set(0, 0.8, 1.5);
+    frontWheel.position.set(0, 0.8, 1.25);
     frontWheel.castShadow = true;
     this.wheels.push(frontWheel);
     this.bikeGroup.add(frontWheel);
@@ -38,66 +43,96 @@ export class Bike {
     // Back wheel
     const backWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
     backWheel.rotation.z = Math.PI / 2;
-    backWheel.position.set(0, 0.8, -1.5);
+    backWheel.position.set(0, 0.8, -1.44);
     backWheel.castShadow = true;
     this.wheels.push(backWheel);
     this.bikeGroup.add(backWheel);
 
     // Frame parts
-    // Main tube (horizontal)
-    const mainTube = new THREE.Mesh(
-      new THREE.BoxGeometry(0.15, 0.15, 3),
+    // Top tube (horizontal)
+    const topTube = new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        0.1, // radiusTop,
+        0.1, // radiusBottom,
+        1.5, // height,
+        8 // radialSegments
+      ),
       frameMaterial
     );
-    mainTube.position.set(0, 1.5, 0);
-    mainTube.castShadow = true;
-    this.bikeGroup.add(mainTube);
+    topTube.position.set(0, 1.8, 0.1);
+    topTube.rotation.x = Math.PI / 2;
+    this.bikeGroup.add(topTube);
+
+    const downTube = new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        0.1, // radiusTop,
+        0.1, // radiusBottom,
+        1.6, // height,
+        8 // radialSegments
+      ),
+      frameMaterial
+    );
+    downTube.position.set(0, 1.3, 0.2);
+    downTube.rotation.x = Math.PI / 3.5;
+    this.bikeGroup.add(downTube);
 
     // Seat tube (vertical)
     const seatTube = new THREE.Mesh(
-      new THREE.BoxGeometry(0.15, 1, 0.15),
+      new THREE.CylinderGeometry(0.1, 0.1, 1.3, 8),
       frameMaterial
     );
-    seatTube.position.set(0, 1.5, -.8);
+    seatTube.position.set(0, 1.35, -0.6);
+    seatTube.rotation.x = Math.PI / -13;
     seatTube.castShadow = true;
     this.bikeGroup.add(seatTube);
 
+    const seatPost = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.09, 0.09, 1.7, 8),
+      accentMaterial
+    );
+    seatPost.position.set(0, 1.55, -0.65);
+    seatPost.rotation.x = Math.PI / -13;
+    seatPost.castShadow = true;
+    this.bikeGroup.add(seatPost);
+
     // Head tube (angled)
     const headTube = new THREE.Mesh(
-      new THREE.BoxGeometry(0.15, 1.2, 0.15),
+      new THREE.CylinderGeometry(0.1, 0.1, 0.45, 8),
       frameMaterial
     );
-    headTube.position.set(0, 1.5, 1);
-    headTube.rotation.x = Math.PI / 6;
+    headTube.position.set(0, 1.8, 0.9);
+    headTube.rotation.x = Math.PI / -16;
     headTube.castShadow = true;
     this.bikeGroup.add(headTube);
 
     // Seat
     const seat = new THREE.Mesh(
-      new THREE.BoxGeometry(0.6, 0.2, 0.8),
+      new THREE.BoxGeometry(0.5, 0.2, 0.8),
       new THREE.MeshLambertMaterial({ color: 0x000000, flatShading: true })
     );
-    seat.position.set(0, 2.3, -.8);
+    seat.position.set(0, 2.3, -0.8);
     seat.castShadow = true;
     this.bikeGroup.add(seat);
 
-    // Handlebars
-    const handlebar = new THREE.Mesh(
-      new THREE.BoxGeometry(1.2, 0.1, 0.1),
-      frameMaterial
-    );
-    handlebar.position.set(0, 2.2, 1.3);
-    handlebar.castShadow = true;
-    this.bikeGroup.add(handlebar);
-
     // Handlebar stem
     const stem = new THREE.Mesh(
-      new THREE.BoxGeometry(0.1, 0.5, 0.1),
-      frameMaterial
+      new THREE.CylinderGeometry(0.09, 0.09, 0.6, 8),
+      accentMaterial
     );
-    stem.position.set(0, 1.95, 1.3);
+    stem.position.set(0, 1.8, 0.9);
+    stem.rotation.x = Math.PI / -16;
     stem.castShadow = true;
     this.bikeGroup.add(stem);
+
+    // Handlebars
+    const bars = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.1, 0.1, 1.6, 8),
+      accentMaterial
+    );
+    bars.position.set(0, 2.15, 0.85);
+    bars.rotation.set(Math.PI / 2, 0, 1.5);
+    bars.castShadow = true;
+    this.bikeGroup.add(bars);
 
     // Position the bike
     this.bikeGroup.position.set(
@@ -111,7 +146,7 @@ export class Bike {
     this.bikeGroup.rotation.y = Math.PI / 2;
 
     this.scene.add(this.bikeGroup);
-    console.log('✓ Bike created');
+    console.log("✓ Bike created");
   }
 
   /**
@@ -132,7 +167,7 @@ export class Bike {
    * Animate wheel rotation
    */
   animateWheels(speed) {
-    this.wheels.forEach(wheel => {
+    this.wheels.forEach((wheel) => {
       wheel.rotation.x += speed;
     });
   }

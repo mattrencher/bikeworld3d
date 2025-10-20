@@ -71,22 +71,19 @@ npm run dev
 
 ## Adding Screenshots or Demo GIFs
 
-To include images or animated demos in this README (useful for quick previews):
+To include images or animated GIFs in this README (useful for demos):
 
 1. Create an `assets/` folder at the project root (for example: `./assets/screenshots/`).
-2. Save screenshots, SVGs, or GIFs there, for example `./assets/screenshots/inspector.png`, `inspector-demo.svg`, or `inspector-demo.gif`.
-3. Reference them in this README using Markdown. Here are examples for PNG, SVG and GIF:
+2. Save screenshots or GIFs there, for example `./assets/screenshots/inspector.png` or `inspector-demo.gif`.
+3. Reference them in this README using Markdown:
 
+```markdown
 ![Inspector screenshot](./assets/screenshots/inspector.png)
 
-![Inspector demo (SVG)](./assets/screenshots/inspector-demo.svg)
-
 ![Demo GIF](./assets/screenshots/inspector-demo.gif)
+```
 
-Notes:
-
-- SVGs are great for small animated placeholders and keep repo sizes tiny.
-- For GIFs, keep resolution and duration small (e.g., 720p or lower and a few seconds) to avoid large repository sizes.
+For GIFs, keep resolution small (e.g., 720p or lower) to avoid large repository sizes.
 
 ---
 
