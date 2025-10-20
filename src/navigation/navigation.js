@@ -12,6 +12,10 @@ export class Navigation {
     this.isRotating = false;
 
     this.scrollAccumulator = 0;
+    // Keyboard acceleration state
+    this.keyVelocity = 0;
+    this.keyAccelerating = false;
+    this.keyDirection = 0; // 1 = right, -1 = left
   }
 
   /**
@@ -29,6 +33,24 @@ export class Navigation {
    * Update rotation with smooth interpolation
    */
   update() {
+    // If keyboard is accelerating, increment velocity toward a cap and apply to targetRotation
+    if (this.keyAccelerating) {
+      // Use CONFIG values if available, otherwise fall back to sensible defaults
+      const accel =
+        typeof CONFIG.KEY_ACCELERATION !== "undefined"
+          ? CONFIG.KEY_ACCELERATION
+          : 0.002;
+      const maxVel =
+        typeof CONFIG.KEY_MAX_ROTATION_SPEED !== "undefined"
+          ? CONFIG.KEY_MAX_ROTATION_SPEED
+          : 0.04;
+
+      this.keyVelocity = Math.min(this.keyVelocity + accel, maxVel);
+      // Apply movement to targetRotation (direction-aware)
+      this.targetRotation -= this.keyVelocity * this.keyDirection;
+      this.isRotating = true;
+    }
+
     if (Math.abs(this.targetRotation - this.currentRotation) > 0.001) {
       // Smooth interpolation (lerp)
       this.currentRotation +=
@@ -41,6 +63,24 @@ export class Navigation {
     } else {
       this.isRotating = false;
     }
+  }
+
+  /**
+   * Start keyboard acceleration in a direction (1 = right, -1 = left)
+   */
+  startKeyAcceleration(direction) {
+    this.keyAccelerating = true;
+    this.keyDirection = direction;
+    // keep existing velocity (will ramp up in update)
+  }
+
+  /**
+   * Stop keyboard acceleration and reset velocity
+   */
+  stopKeyAcceleration() {
+    this.keyAccelerating = false;
+    this.keyDirection = 0;
+    this.keyVelocity = 0;
   }
 
   /**
@@ -88,6 +128,9 @@ export class Navigation {
    */
   snapToBuilding(index) {
     const anglePerBuilding = (Math.PI * 2) / CONFIG.BUILDING_COUNT;
-    this.targetRotation = anglePerBuilding * index;
+    // Align the chosen building index to the bike's forward position.
+    // The selection logic adds an offset of Math.PI / 2 when computing the current index,
+    // so subtract that offset here so the building at `index` will end up at the front.
+    this.targetRotation = anglePerBuilding * index - Math.PI / 2;
   }
 }

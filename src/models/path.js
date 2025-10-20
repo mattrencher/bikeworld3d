@@ -3,8 +3,7 @@ import * as THREE from "three";
 import { CONFIG } from "../utils/constants.js";
 
 export class Path {
-  constructor(scene) {
-    this.scene = scene;
+  constructor() {
     this.pathGroup = new THREE.Group();
   }
 
