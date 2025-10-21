@@ -129,7 +129,7 @@ export class Bike {
       new THREE.CylinderGeometry(0.1, 0.1, 1.6, 8),
       accentMaterial
     );
-    bars.position.set(0, 2.15, 0.85);
+    bars.position.set(0, 2.35, 0.85);
     bars.rotation.set(Math.PI / 2, 0, 1.5);
     bars.castShadow = true;
     this.bikeGroup.add(bars);

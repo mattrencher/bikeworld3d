@@ -31,7 +31,7 @@ export class Rider {
       new THREE.BoxGeometry(0.8, 1.2, 0.5),
       clothesMaterial
     );
-    torso.position.set(0, 2.8, -0.8);
+    torso.position.set(0, 2.8, -0.7);
     torso.rotation.x = Math.PI / 12; // Slight lean forward
     torso.castShadow = true;
     this.riderGroup.add(torso);
@@ -41,7 +41,7 @@ export class Rider {
       new THREE.BoxGeometry(0.6, 0.6, 0.6),
       skinMaterial
     );
-    head.position.set(0, 3.8, -0.7);
+    head.position.set(0, 3.8, -0.5);
     head.castShadow = true;
     this.riderGroup.add(head);
 
@@ -52,13 +52,13 @@ export class Rider {
     // Left eye
     const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
     leftEye.scale.set(1, 1.3, 0.6); // Make it oval
-    leftEye.position.set(0.15, 3.85, -0.4);
+    leftEye.position.set(0.15, 3.85, -0.2);
     this.riderGroup.add(leftEye);
 
     // Right eye
     const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
     rightEye.scale.set(1, 1.3, 0.6); // Make it oval
-    rightEye.position.set(-0.15, 3.85, -0.4);
+    rightEye.position.set(-0.15, 3.85, -0.2);
     this.riderGroup.add(rightEye);
 
     // Ball Cap - basic baseball cap
@@ -92,7 +92,7 @@ export class Rider {
     );
     const hatScale = 0.65;
     hatDome.scale.set(hatScale, -hatScale * 0.8, hatScale); // Scale up to fit on head
-    hatDome.position.set(0, 4.13, -0.7); // Position higher to sit on top
+    hatDome.position.set(0, 4.13, -0.5); // Position higher to sit on top
     // hatDome.castShadow = true;
     this.riderGroup.add(hatDome);
 
@@ -101,7 +101,7 @@ export class Rider {
       new THREE.BoxGeometry(0.55, 0.05, 0.7),
       capMaterial
     );
-    capBrim.position.set(0, 4.05, -0.35); // Adjusted forward position for longer brim
+    capBrim.position.set(0, 4.05, -0.16); // Adjusted forward position for longer brim
     capBrim.rotation.x = -Math.PI / 8; // Slight downward angle
     capBrim.castShadow = true;
     this.riderGroup.add(capBrim);
@@ -111,20 +111,20 @@ export class Rider {
 
     // Left arm
     const leftArm = new THREE.Mesh(armGeometry, skinMaterial);
-    leftArm.position.set(0.5, 3.1, -0.3);
+    leftArm.position.set(0.5, 3.1, -0.1);
     leftArm.rotation.x = Math.PI / -2.7;
     leftArm.castShadow = true;
     this.riderGroup.add(leftArm);
 
     // Right arm
     const rightArm = new THREE.Mesh(armGeometry, skinMaterial);
-    rightArm.position.set(-0.5, 3.1, -0.3);
+    rightArm.position.set(-0.5, 3.1, -0.1);
     rightArm.rotation.x = Math.PI / -2.7;
     rightArm.castShadow = true;
     this.riderGroup.add(rightArm);
 
     // Legs (for pedaling animation)
-    const legGeometry = new THREE.BoxGeometry(0.25, 0.8, 0.25);
+    const legGeometry = new THREE.BoxGeometry(0.25, 1.35, 0.25);
 
     // Left leg
     const leftLeg = new THREE.Mesh(legGeometry, clothesMaterial);
@@ -152,7 +152,7 @@ export class Rider {
   animatePedaling(isMoving) {
     if (!isMoving) return;
 
-    this.animationTime += 0.1;
+    this.animationTime += 0.14;
 
     if (this.legs.length === 2) {
       // Alternate leg movement (pedaling)
