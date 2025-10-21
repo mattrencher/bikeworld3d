@@ -7,6 +7,11 @@ export class Bike {
     this.scene = scene;
     this.bikeGroup = new THREE.Group();
     this.wheels = [];
+    this.baseY = CONFIG.BIKE_POSITION.y;
+    this.baseRotationX = 0; // Store base rotation for tilt (changed from Z to X)
+    this.bunnyHopActive = false;
+    this.bunnyHopTime = 0;
+    this.bunnyHopCooldownTimer = 0;
   }
 
   /**
@@ -170,5 +175,70 @@ export class Bike {
     this.wheels.forEach((wheel) => {
       wheel.rotation.x += speed;
     });
+  }
+
+  /**
+   * Perform bunny hop animation
+   */
+  bunnyHop() {
+    if (this.bunnyHopActive || this.bunnyHopCooldownTimer > 0) {
+      return false;
+    }
+    
+    this.bunnyHopActive = true;
+    this.bunnyHopTime = 0;
+    console.log("🐰 Bunny hop!");
+    return true;
+  }
+
+  /**
+   * Update bunny hop animation
+   * @param {number} deltaTime - Time since last frame in seconds
+   */
+  updateBunnyHop(deltaTime) {
+    // Update cooldown timer
+    if (this.bunnyHopCooldownTimer > 0) {
+      this.bunnyHopCooldownTimer -= deltaTime;
+    }
+
+    if (!this.bunnyHopActive) return;
+
+    this.bunnyHopTime += deltaTime;
+
+    // Calculate hop progress (0 to 1)
+    const progress = this.bunnyHopTime / CONFIG.BUNNY_HOP_DURATION;
+
+    if (progress >= 1) {
+      // Hop complete - reset to base state
+      this.bunnyHopActive = false;
+      this.bikeGroup.position.y = this.baseY;
+      this.bikeGroup.rotation.x = this.baseRotationX;
+      this.bunnyHopCooldownTimer = CONFIG.BUNNY_HOP_COOLDOWN;
+      return;
+    }
+
+    // Parabolic arc for natural jump motion
+    // sin gives smooth up and down motion
+    const heightMultiplier = Math.sin(progress * Math.PI);
+    const hopHeight = heightMultiplier * CONFIG.BUNNY_HOP_HEIGHT;
+
+    this.bikeGroup.position.y = this.baseY + hopHeight;
+
+    // Slight rotation for style (bike tilts back slightly at peak)
+    // Using X rotation for a wheelie effect
+    const tiltAmount = Math.sin(progress * Math.PI) * 0.25; // Increased from 0.15
+    this.bikeGroup.rotation.x = this.baseRotationX + tiltAmount;
+    
+    // Debug logging
+    if (progress > 0.45 && progress < 0.55) {
+      console.log(`🎯 Peak tilt: ${tiltAmount.toFixed(3)} radians (${(tiltAmount * 57.3).toFixed(1)}°)`);
+    }
+  }
+
+  /**
+   * Check if bunny hop is active
+   */
+  isBunnyHopping() {
+    return this.bunnyHopActive;
   }
 }

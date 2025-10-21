@@ -97,16 +97,16 @@ class BikeWorld3D {
     // Navigation controller
     this.navigation = new Navigation(cityGroup, this.buildings);
 
-    // Scroll handler
-    this.scrollHandler = new ScrollHandler(this.navigation);
+    // Animation manager (created before scroll handler so it can be passed in)
+    this.animationManager = new AnimationManager(this.bike, this.rider);
+
+    // Scroll handler (now with animation manager reference)
+    this.scrollHandler = new ScrollHandler(this.navigation, this.animationManager);
     this.scrollHandler.init();
 
     // Menu system
     this.menuSystem = new MenuSystem(camera, this.buildings, this.navigation);
     this.menuSystem.init();
-
-    // Animation manager
-    this.animationManager = new AnimationManager(this.bike, this.rider);
   }
 
   /**

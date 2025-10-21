@@ -37,6 +37,11 @@ export const CONFIG = {
   SNAP_THRESHOLD: 0.1, // Radians threshold for snapping to building
   HIGHLIGHT_SCALE: 1.1,
 
+  // Bunny hop settings
+  BUNNY_HOP_HEIGHT: 3.5,
+  BUNNY_HOP_DURATION: 0.6, // seconds
+  BUNNY_HOP_COOLDOWN: 0.8, // seconds
+
   // Colors
   GROUND_COLOR: 0x2c5530,
   PATH_COLOR: 0x404040,
