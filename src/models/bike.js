@@ -8,7 +8,7 @@ export class Bike {
     this.bikeGroup = new THREE.Group();
     this.wheels = [];
     this.baseY = CONFIG.BIKE_POSITION.y;
-    this.baseRotationX = 0; // Store base rotation for tilt (changed from Z to X)
+    this.baseRotationZ = 0; // Store base rotation for tilt (wheelie effect)
     this.bunnyHopActive = false;
     this.bunnyHopTime = 0;
     this.bunnyHopCooldownTimer = 0;
@@ -184,7 +184,7 @@ export class Bike {
     if (this.bunnyHopActive || this.bunnyHopCooldownTimer > 0) {
       return false;
     }
-    
+
     this.bunnyHopActive = true;
     this.bunnyHopTime = 0;
     console.log("🐰 Bunny hop!");
@@ -212,7 +212,7 @@ export class Bike {
       // Hop complete - reset to base state
       this.bunnyHopActive = false;
       this.bikeGroup.position.y = this.baseY;
-      this.bikeGroup.rotation.x = this.baseRotationX;
+      this.bikeGroup.rotation.z = this.baseRotationZ;
       this.bunnyHopCooldownTimer = CONFIG.BUNNY_HOP_COOLDOWN;
       return;
     }
@@ -224,15 +224,21 @@ export class Bike {
 
     this.bikeGroup.position.y = this.baseY + hopHeight;
 
-    // Slight rotation for style (bike tilts back slightly at peak)
-    // Using X rotation for a wheelie effect
-    const tiltAmount = Math.sin(progress * Math.PI) * 0.25; // Increased from 0.15
-    this.bikeGroup.rotation.x = this.baseRotationX + tiltAmount;
-    
+    // Wheelie tilt: negative Z rotation tilts the bike backward
+    // (after Y rotation of 90°, Z axis controls the forward/back tilt)
+    const tiltAmount = Math.sin(progress * Math.PI) * -0.25; // Negative for backward tilt
+    this.bikeGroup.rotation.z = this.baseRotationZ + tiltAmount;
+
     // Debug logging
-    if (progress > 0.45 && progress < 0.55) {
-      console.log(`🎯 Peak tilt: ${tiltAmount.toFixed(3)} radians (${(tiltAmount * 57.3).toFixed(1)}°)`);
-    }
+    console.log(
+      `🚴 Hop progress: ${(progress * 100).toFixed(
+        0
+      )}% | Y: ${this.bikeGroup.position.y.toFixed(
+        2
+      )} | Z rotation: ${this.bikeGroup.rotation.z.toFixed(3)} rad (${(
+        this.bikeGroup.rotation.z * 57.3
+      ).toFixed(1)}°)`
+    );
   }
 
   /**

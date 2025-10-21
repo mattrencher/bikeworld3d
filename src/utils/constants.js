@@ -50,6 +50,8 @@ export const CONFIG = {
   DIRECTIONAL_LIGHT: 0xffffff,
 };
 
+export const DEFAULTMODEL = "bike";
+
 // Content for each building section
 export const CONTENT = {
   Home: {

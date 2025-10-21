@@ -2,8 +2,9 @@
 import "./inspector.css";
 import { InspectorScene } from "./inspectorScene.js";
 import { ModelLoader } from "./modelLoader.js";
+import { DEFAULTMODEL } from "../../utils/constants.js";
 
-const defaultModel = "bike";
+const defaultModel = DEFAULTMODEL;
 
 class ModelInspector {
   constructor() {
