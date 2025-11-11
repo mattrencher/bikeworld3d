@@ -149,18 +149,25 @@ export class Rider {
   /**
    * Animate pedaling motion
    */
-  animatePedaling(isMoving) {
-    if (!isMoving) return;
+  animatePedaling(isMoving, isBunnyHopping = false) {
+    if (!isMoving && !isBunnyHopping) return;
 
     this.animationTime += 0.1;
 
     if (this.legs.length === 2) {
-      // Alternate leg movement (pedaling)
-      const leftLegRotation = Math.sin(this.animationTime) * 0.3;
-      const rightLegRotation = Math.sin(this.animationTime + Math.PI) * 0.3;
+      if (isBunnyHopping) {
+        // Tuck legs up during bunny hop
+        const tuckAmount = -0.8; // Pull legs up
+        this.legs[0].rotation.x = tuckAmount;
+        this.legs[1].rotation.x = tuckAmount;
+      } else {
+        // Alternate leg movement (pedaling)
+        const leftLegRotation = Math.sin(this.animationTime) * 0.3;
+        const rightLegRotation = Math.sin(this.animationTime + Math.PI) * 0.3;
 
-      this.legs[0].rotation.x = leftLegRotation;
-      this.legs[1].rotation.x = rightLegRotation;
+        this.legs[0].rotation.x = leftLegRotation;
+        this.legs[1].rotation.x = rightLegRotation;
+      }
     }
   }
 

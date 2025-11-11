@@ -7,6 +7,11 @@ export class Bike {
     this.scene = scene;
     this.bikeGroup = new THREE.Group();
     this.wheels = [];
+    this.baseY = CONFIG.BIKE_POSITION.y;
+    this.baseRotationZ = 0; // Store base rotation for tilt (wheelie effect)
+    this.bunnyHopActive = false;
+    this.bunnyHopTime = 0;
+    this.bunnyHopCooldownTimer = 0;
   }
 
   /**
@@ -170,5 +175,76 @@ export class Bike {
     this.wheels.forEach((wheel) => {
       wheel.rotation.x += speed;
     });
+  }
+
+  /**
+   * Perform bunny hop animation
+   */
+  bunnyHop() {
+    if (this.bunnyHopActive || this.bunnyHopCooldownTimer > 0) {
+      return false;
+    }
+
+    this.bunnyHopActive = true;
+    this.bunnyHopTime = 0;
+    console.log("🐰 Bunny hop!");
+    return true;
+  }
+
+  /**
+   * Update bunny hop animation
+   * @param {number} deltaTime - Time since last frame in seconds
+   */
+  updateBunnyHop(deltaTime) {
+    // Update cooldown timer
+    if (this.bunnyHopCooldownTimer > 0) {
+      this.bunnyHopCooldownTimer -= deltaTime;
+    }
+
+    if (!this.bunnyHopActive) return;
+
+    this.bunnyHopTime += deltaTime;
+
+    // Calculate hop progress (0 to 1)
+    const progress = this.bunnyHopTime / CONFIG.BUNNY_HOP_DURATION;
+
+    if (progress >= 1) {
+      // Hop complete - reset to base state
+      this.bunnyHopActive = false;
+      this.bikeGroup.position.y = this.baseY;
+      this.bikeGroup.rotation.z = this.baseRotationZ;
+      this.bunnyHopCooldownTimer = CONFIG.BUNNY_HOP_COOLDOWN;
+      return;
+    }
+
+    // Parabolic arc for natural jump motion
+    // sin gives smooth up and down motion
+    const heightMultiplier = Math.sin(progress * Math.PI);
+    const hopHeight = heightMultiplier * CONFIG.BUNNY_HOP_HEIGHT;
+
+    this.bikeGroup.position.y = this.baseY + hopHeight;
+
+    // Wheelie tilt: negative Z rotation tilts the bike backward
+    // (after Y rotation of 90°, Z axis controls the forward/back tilt)
+    const tiltAmount = Math.sin(progress * Math.PI) * -0.25; // Negative for backward tilt
+    this.bikeGroup.rotation.z = this.baseRotationZ + tiltAmount;
+
+    // Debug logging
+    console.log(
+      `🚴 Hop progress: ${(progress * 100).toFixed(
+        0
+      )}% | Y: ${this.bikeGroup.position.y.toFixed(
+        2
+      )} | Z rotation: ${this.bikeGroup.rotation.z.toFixed(3)} rad (${(
+        this.bikeGroup.rotation.z * 57.3
+      ).toFixed(1)}°)`
+    );
+  }
+
+  /**
+   * Check if bunny hop is active
+   */
+  isBunnyHopping() {
+    return this.bunnyHopActive;
   }
 }

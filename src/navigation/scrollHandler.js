@@ -1,7 +1,8 @@
 // Scroll handler - manages mouse wheel events
 export class ScrollHandler {
-  constructor(navigation) {
+  constructor(navigation, animationManager = null) {
     this.navigation = navigation;
+    this.animationManager = animationManager;
     this.isEnabled = true;
   }
 
@@ -68,6 +69,14 @@ export class ScrollHandler {
       const prevIndex =
         (this.navigation.getCurrentBuildingIndex() - 1 + count) % count;
       this.navigation.snapToBuilding(prevIndex);
+      event.preventDefault();
+    }
+
+    // Spacebar for bunny hop
+    if (event.code === "Space") {
+      if (this.animationManager) {
+        this.animationManager.triggerBunnyHop();
+      }
       event.preventDefault();
     }
   }
