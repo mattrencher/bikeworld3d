@@ -64,10 +64,11 @@ class BikeWorld3D {
     this.buildings = new Buildings(scene);
     this.buildings.create();
 
+    // Get city group for parenting elements
+    const cityGroup = this.buildings.getCityGroup();
+
     // Parent the path to the city group so it rotates together with buildings
-    // Remove the path from the root scene and add it under the city group
     try {
-      const cityGroup = this.buildings.getCityGroup();
       const pathGroup = this.path.getPathGroup();
       // Ensure pathGroup exists and add it under the city group so it rotates with buildings
       if (pathGroup && cityGroup) {
@@ -77,6 +78,9 @@ class BikeWorld3D {
     } catch (err) {
       console.warn("Could not parent path to city group:", err);
     }
+
+    // Load HDR environment and attach to city group
+    this.sceneSetup.loadHDREnvironment(cityGroup);
 
     // Create bike
     this.bike = new Bike(scene);
