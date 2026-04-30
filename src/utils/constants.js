@@ -39,8 +39,16 @@ export const CONFIG = {
 
   // Bunny hop settings
   BUNNY_HOP_HEIGHT: 3.5,
-  BUNNY_HOP_DURATION: 0.6, // seconds
+  BUNNY_HOP_DURATION: 0.9, // seconds
   BUNNY_HOP_COOLDOWN: 0.8, // seconds
+
+  // Double jump settings
+  DOUBLE_JUMP_HEIGHT: 6.5,
+  DOUBLE_JUMP_DURATION: 1.35,
+
+  // Trick settings
+  TRICK_DURATION: 0.52,
+  TAILWHIP_DURATION: 0.38,
 
   // Colors
   GROUND_COLOR: 0x2c5530,

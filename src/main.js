@@ -9,6 +9,7 @@ import { Navigation } from "./navigation/navigation.js";
 import { ScrollHandler } from "./navigation/scrollHandler.js";
 import { MenuSystem } from "./navigation/menuSystem.js";
 import { AnimationManager } from "./utils/animations.js";
+import { TrickSystem } from "./navigation/trickSystem.js";
 
 class BikeWorld3D {
   constructor() {
@@ -21,6 +22,7 @@ class BikeWorld3D {
     this.scrollHandler = null;
     this.menuSystem = null;
     this.animationManager = null;
+    this.trickSystem = null;
   }
 
   /**
@@ -86,8 +88,8 @@ class BikeWorld3D {
     this.bike = new Bike(scene);
     this.bike.create();
 
-    // Create rider
-    this.rider = new Rider(scene, this.bike.getBikeGroup());
+    // Create rider (attach to tilt group so it tilts with bike during wheelie)
+    this.rider = new Rider(scene, this.bike.getTiltGroup());
     this.rider.create();
   }
 
@@ -104,8 +106,15 @@ class BikeWorld3D {
     // Animation manager (created before scroll handler so it can be passed in)
     this.animationManager = new AnimationManager(this.bike, this.rider);
 
-    // Scroll handler (now with animation manager reference)
-    this.scrollHandler = new ScrollHandler(this.navigation, this.animationManager);
+    // Trick system — no instructions, discover by pressing keys mid-air
+    this.trickSystem = new TrickSystem(this.bike);
+
+    // Scroll handler (now with animation manager and trick system)
+    this.scrollHandler = new ScrollHandler(
+      this.navigation,
+      this.animationManager,
+      this.trickSystem,
+    );
     this.scrollHandler.init();
 
     // Menu system

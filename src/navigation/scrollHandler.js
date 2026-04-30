@@ -1,8 +1,9 @@
 // Scroll handler - manages mouse wheel events
 export class ScrollHandler {
-  constructor(navigation, animationManager = null) {
+  constructor(navigation, animationManager = null, trickSystem = null) {
     this.navigation = navigation;
     this.animationManager = animationManager;
+    this.trickSystem = trickSystem;
     this.isEnabled = true;
   }
 
@@ -46,6 +47,12 @@ export class ScrollHandler {
         active.isContentEditable)
     )
       return;
+
+    // Trick keys — attempt while airborne; keys are intentionally undocumented
+    if (this.trickSystem && this.trickSystem.handleKey(event.key)) {
+      event.preventDefault();
+      return;
+    }
 
     // Map ArrowRight/ArrowLeft to start/continue smooth acceleration
     if (event.key === "ArrowRight") {

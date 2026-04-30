@@ -1,5 +1,5 @@
 // Animation utilities
-import { CONFIG } from './constants.js';
+import { CONFIG } from "./constants.js";
 
 export class AnimationManager {
   constructor(bike, rider) {
@@ -31,16 +31,25 @@ export class AnimationManager {
     }
 
     // Smooth wheel speed transition
-    this.wheelRotationSpeed += (this.targetWheelSpeed - this.wheelRotationSpeed) * 0.1;
+    this.wheelRotationSpeed +=
+      (this.targetWheelSpeed - this.wheelRotationSpeed) * 0.1;
 
     // Animate wheels (slower during bunny hop)
     if (Math.abs(this.wheelRotationSpeed) > 0.001) {
-      const wheelSpeed = isBunnyHopping ? this.wheelRotationSpeed * 0.5 : this.wheelRotationSpeed;
+      const wheelSpeed = isBunnyHopping
+        ? this.wheelRotationSpeed * 0.5
+        : this.wheelRotationSpeed;
       this.bike.animateWheels(wheelSpeed);
     }
 
     // Animate rider pedaling
-    this.rider.animatePedaling(Math.abs(this.wheelRotationSpeed) > 0.01, isBunnyHopping);
+    this.rider.animatePedaling(
+      Math.abs(this.wheelRotationSpeed) > 0.01,
+      isBunnyHopping,
+    );
+
+    // Sync rider body pose to current trick state
+    this.rider.updateTrick(this.bike.getTrickInfo());
   }
 
   /**
