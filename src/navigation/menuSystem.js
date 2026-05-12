@@ -44,6 +44,26 @@ export class MenuSystem {
       }
     });
 
+    // Mobile: tap canvas opens current building
+    window.addEventListener("mobiletap", () => this.openCurrentBuilding());
+
+    // Mobile: building name tap opens content
+    if (this.buildingNameDisplay) {
+      this.buildingNameDisplay.style.cursor = "pointer";
+      this.buildingNameDisplay.addEventListener("click", () =>
+        this.openCurrentBuilding(),
+      );
+    }
+
+    // Mobile navigation buttons
+    const prevBtn = document.getElementById("mobile-prev");
+    const nextBtn = document.getElementById("mobile-next");
+    const enterBtn = document.getElementById("mobile-enter");
+    if (prevBtn) prevBtn.addEventListener("click", () => this.navigatePrev());
+    if (nextBtn) nextBtn.addEventListener("click", () => this.navigateNext());
+    if (enterBtn)
+      enterBtn.addEventListener("click", () => this.openCurrentBuilding());
+
     console.log("✓ Menu system initialized");
   }
 
@@ -132,7 +152,8 @@ export class MenuSystem {
       // Update building name display
       const currentBuilding = this.navigation.getCurrentBuilding();
       this.buildingNameDisplay.textContent = currentBuilding.name;
-      this.buildingNameDisplay.classList.add("visible");
+      // building name display disabled
+      // this.buildingNameDisplay.classList.add("visible");
     }
   }
 
@@ -141,5 +162,35 @@ export class MenuSystem {
    */
   getIsContentOpen() {
     return this.isContentOpen;
+  }
+
+  /**
+   * Open content for the currently highlighted building
+   */
+  openCurrentBuilding() {
+    if (this.isContentOpen) return;
+    const currentBuilding = this.navigation.getCurrentBuilding();
+    if (currentBuilding) {
+      this.showContent(currentBuilding.name);
+    }
+  }
+
+  /**
+   * Navigate to the previous building
+   */
+  navigatePrev() {
+    const count = this.navigation.buildings.getBuildings().length;
+    const prevIndex =
+      (this.navigation.getCurrentBuildingIndex() - 1 + count) % count;
+    this.navigation.snapToBuilding(prevIndex);
+  }
+
+  /**
+   * Navigate to the next building
+   */
+  navigateNext() {
+    const count = this.navigation.buildings.getBuildings().length;
+    const nextIndex = (this.navigation.getCurrentBuildingIndex() + 1) % count;
+    this.navigation.snapToBuilding(nextIndex);
   }
 }

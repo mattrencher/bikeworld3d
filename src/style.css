@@ -31,6 +31,7 @@ canvas {
   display: block;
   width: 100%;
   height: 100%;
+  touch-action: none;
 }
 
 /* UI Overlay */
@@ -200,4 +201,91 @@ canvas {
 
 .content-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+
+/* Mobile nav hint visibility */
+#nav-hint-mobile {
+  display: none;
+}
+
+/* Mobile navigation controls */
+#mobile-controls {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  gap: 16px;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.mobile-btn {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease;
+}
+
+.mobile-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-enter-btn {
+  font-size: 14px;
+  font-weight: 600;
+  width: 80px;
+  border-radius: 28px;
+  letter-spacing: 0.05em;
+}
+
+/* Show mobile controls and adjust hints on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  #mobile-controls {
+    display: flex;
+  }
+  #nav-hint-desktop {
+    display: none;
+  }
+  #nav-hint-mobile {
+    display: block;
+  }
+  .building-name {
+    cursor: pointer;
+  }
+}
+
+/* Responsive content overlay for small screens */
+@media (max-width: 600px) {
+  .content-container {
+    padding: 28px 20px;
+    border-radius: 16px;
+    max-height: 85vh;
+    width: 95%;
+  }
+  .content-body h2 {
+    font-size: 24px;
+  }
+  .content-body p {
+    font-size: 15px;
+  }
+  .building-name {
+    font-size: 20px;
+    padding: 12px 24px;
+  }
+  #inspector-link {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
 }

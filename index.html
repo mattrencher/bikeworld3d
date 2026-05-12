@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,13 +13,39 @@
 
     <!-- Navigation hints overlay -->
     <div id="ui-overlay">
-      <div class="nav-hint">Scroll to ride around the city</div>
+      <div class="nav-hint" id="nav-hint-desktop">
+        Scroll to ride around the city
+      </div>
+      <div class="nav-hint" id="nav-hint-mobile">
+        Swipe to ride &bull; Tap to explore
+      </div>
       <div class="building-name" id="building-name"></div>
 
       <!-- Inspector Link -->
       <a href="/inspector.html" id="inspector-link" class="nav-link">
         🔍 Model Inspector
       </a>
+
+      <!-- Mobile navigation controls -->
+      <div id="mobile-controls">
+        <button
+          id="mobile-prev"
+          class="mobile-btn"
+          aria-label="Previous building"
+        >
+          &#9664;
+        </button>
+        <button
+          id="mobile-enter"
+          class="mobile-btn mobile-enter-btn"
+          aria-label="Enter building"
+        >
+          Enter
+        </button>
+        <button id="mobile-next" class="mobile-btn" aria-label="Next building">
+          &#9654;
+        </button>
+      </div>
     </div>
 
     <!-- Content overlay (hidden by default) -->

@@ -1,14 +1,20 @@
-// Scroll handler - manages mouse wheel events
+// Scroll handler - manages mouse wheel and touch events
 export class ScrollHandler {
   constructor(navigation, animationManager = null, trickSystem = null) {
     this.navigation = navigation;
     this.animationManager = animationManager;
     this.trickSystem = trickSystem;
     this.isEnabled = true;
+
+    // Touch state
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchLastX = 0;
+    this.touchMoved = false;
   }
 
   /**
-   * Initialize scroll event listener
+   * Initialize scroll and touch event listeners
    */
   init() {
     window.addEventListener("wheel", (event) => this.onScroll(event), {
@@ -17,6 +23,21 @@ export class ScrollHandler {
     // Add keyboard navigation
     window.addEventListener("keydown", (event) => this.onKeyDown(event));
     window.addEventListener("keyup", (event) => this.onKeyUp(event));
+
+    // Touch navigation for mobile
+    const canvas = document.querySelector("canvas");
+    if (canvas) {
+      canvas.addEventListener("touchstart", (e) => this.onTouchStart(e), {
+        passive: true,
+      });
+      canvas.addEventListener("touchmove", (e) => this.onTouchMove(e), {
+        passive: false,
+      });
+      canvas.addEventListener("touchend", (e) => this.onTouchEnd(e), {
+        passive: true,
+      });
+    }
+
     console.log("✓ Scroll handler initialized");
   }
 
@@ -97,6 +118,47 @@ export class ScrollHandler {
     if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
       this.navigation.stopKeyAcceleration();
       event.preventDefault();
+    }
+  }
+
+  /**
+   * Handle touch start — record initial position
+   */
+  onTouchStart(event) {
+    if (!this.isEnabled) return;
+    const touch = event.touches[0];
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.touchLastX = touch.clientX;
+    this.touchMoved = false;
+  }
+
+  /**
+   * Handle touch move — drive city rotation from horizontal drag
+   */
+  onTouchMove(event) {
+    if (!this.isEnabled) return;
+    event.preventDefault();
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - this.touchLastX;
+    const totalMoved =
+      Math.abs(touch.clientX - this.touchStartX) +
+      Math.abs(touch.clientY - this.touchStartY);
+    if (totalMoved > 8) this.touchMoved = true;
+
+    // Drag left → positive scroll (clockwise), drag right → counter-clockwise
+    const normalized = (-deltaX / window.innerWidth) * 3;
+    this.navigation.handleScroll(normalized);
+    this.touchLastX = touch.clientX;
+  }
+
+  /**
+   * Handle touch end — fire tap event when no significant drag occurred
+   */
+  onTouchEnd(event) {
+    if (!this.isEnabled) return;
+    if (!this.touchMoved) {
+      window.dispatchEvent(new CustomEvent("mobiletap"));
     }
   }
 
