@@ -37,6 +37,10 @@ export const CONFIG = {
   SNAP_THRESHOLD: 0.1, // Radians threshold for snapping to building
   HIGHLIGHT_SCALE: 1.1,
 
+  // Keyboard navigation
+  KEY_ACCELERATION: 0.002,
+  KEY_MAX_ROTATION_SPEED: 0.04,
+
   // Bunny hop settings
   BUNNY_HOP_HEIGHT: 3.5,
   BUNNY_HOP_DURATION: 0.9, // seconds

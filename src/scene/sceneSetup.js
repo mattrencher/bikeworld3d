@@ -31,12 +31,12 @@ export class SceneSetup {
       CONFIG.CAMERA_FOV,
       aspect,
       0.1,
-      2000 // Increased to see the skybox sphere
+      2000, // Increased to see the skybox sphere
     );
     this.camera.position.set(
       CONFIG.CAMERA_POSITION.x,
       CONFIG.CAMERA_POSITION.y,
-      CONFIG.CAMERA_POSITION.z
+      CONFIG.CAMERA_POSITION.z,
     );
     this.camera.lookAt(0, 0, 0);
 
@@ -70,17 +70,17 @@ export class SceneSetup {
    */
   loadHDREnvironment(cityGroup) {
     const rgbeLoader = new RGBELoader();
-    
+
     console.log("🔄 Loading HDR environment...");
-    
+
     rgbeLoader.load(
-      '/assets/Space_2K.hdr',
+      "/assets/Space_2K.hdr",
       (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping;
-        
+
         // Create a large sphere for the skybox (smaller than camera far plane)
         const skyboxGeometry = new THREE.SphereGeometry(800, 60, 40);
-        
+
         // Custom shader material that applies fog to HDR texture
         const skyboxMaterial = new THREE.ShaderMaterial({
           uniforms: {
@@ -130,38 +130,43 @@ export class SceneSetup {
           side: THREE.BackSide,
           depthWrite: false,
         });
-        
+
         this.skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
         this.skyboxMesh.name = "HDR_Skybox";
-        
+
         // Add to city group so it rotates with the world
         if (cityGroup) {
           cityGroup.add(this.skyboxMesh);
           console.log("✓ HDR skybox loaded and parented to city group");
-          console.log("   Skybox parent:", this.skyboxMesh.parent.name || "unnamed group");
+          console.log(
+            "   Skybox parent:",
+            this.skyboxMesh.parent.name || "unnamed group",
+          );
           console.log("   City group children:", cityGroup.children.length);
         } else {
           // Fallback: add to scene if city group not available yet
           this.scene.add(this.skyboxMesh);
           console.log("✓ HDR skybox loaded (will be reparented)");
         }
-        
+
         // Set as environment map for reflections
         this.scene.environment = texture;
-        
+
         // Hide the solid color background now that we have the skybox
         this.scene.background = null;
-        
+
         this.environmentLoaded = true;
       },
       (progress) => {
-        const percent = (progress.loaded / progress.total) * 100;
-        console.log(`📥 Loading HDR: ${percent.toFixed(0)}%`);
+        if (progress.total) {
+          const percent = (progress.loaded / progress.total) * 100;
+          console.log(`📥 Loading HDR: ${percent.toFixed(0)}%`);
+        }
       },
       (error) => {
         console.error("❌ Error loading HDR:", error);
         // Keep the fallback color background
-      }
+      },
     );
   }
 
@@ -183,7 +188,7 @@ export class SceneSetup {
     // Directional light (sun)
     const directionalLight = new THREE.DirectionalLight(
       CONFIG.DIRECTIONAL_LIGHT,
-      0.8
+      0.8,
     );
     directionalLight.position.set(50, 80, 40);
     directionalLight.castShadow = true;
@@ -222,6 +227,23 @@ export class SceneSetup {
     ground.position.y = 0;
     ground.receiveShadow = true;
     this.scene.add(ground);
+
+    // Decorative concentric rings for visual depth on the ground plane.
+    // These are static (not in cityGroup) so they serve as calm depth cues
+    // while the rotating path features above provide the motion.
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0x245228,
+      side: THREE.DoubleSide,
+    });
+    [45, 65, 82].forEach((r) => {
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(r, r + 0.4, 64),
+        ringMat,
+      );
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.y = 0.05;
+      this.scene.add(ring);
+    });
 
     console.log("✓ Ground added");
   }

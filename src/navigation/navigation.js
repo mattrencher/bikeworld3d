@@ -35,17 +35,10 @@ export class Navigation {
   update() {
     // If keyboard is accelerating, increment velocity toward a cap and apply to targetRotation
     if (this.keyAccelerating) {
-      // Use CONFIG values if available, otherwise fall back to sensible defaults
-      const accel =
-        typeof CONFIG.KEY_ACCELERATION !== "undefined"
-          ? CONFIG.KEY_ACCELERATION
-          : 0.002;
-      const maxVel =
-        typeof CONFIG.KEY_MAX_ROTATION_SPEED !== "undefined"
-          ? CONFIG.KEY_MAX_ROTATION_SPEED
-          : 0.04;
-
-      this.keyVelocity = Math.min(this.keyVelocity + accel, maxVel);
+      this.keyVelocity = Math.min(
+        this.keyVelocity + CONFIG.KEY_ACCELERATION,
+        CONFIG.KEY_MAX_ROTATION_SPEED,
+      );
       // Apply movement to targetRotation (direction-aware)
       this.targetRotation -= this.keyVelocity * this.keyDirection;
       this.isRotating = true;

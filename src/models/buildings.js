@@ -1,6 +1,6 @@
 // Buildings - City structure with 8 menu buildings
-import * as THREE from 'three';
-import { CONFIG } from '../utils/constants.js';
+import * as THREE from "three";
+import { CONFIG } from "../utils/constants.js";
 
 export class Buildings {
   constructor(scene) {
@@ -44,34 +44,37 @@ export class Buildings {
     const depth = 8 + Math.random() * 4;
 
     const geometry = new THREE.BoxGeometry(width, height, depth);
-    const material = new THREE.MeshLambertMaterial({ 
+    const material = new THREE.MeshLambertMaterial({
       color: buildingData.color,
       flatShading: true,
       emissive: buildingData.color,
-      emissiveIntensity: 0.1
+      emissiveIntensity: 0.1,
     });
-    
+
     const buildingMesh = new THREE.Mesh(geometry, material);
     buildingMesh.position.y = height / 2;
     buildingMesh.castShadow = true;
     buildingMesh.receiveShadow = true;
-    
+
     // Store building data on mesh for raycasting
     buildingMesh.userData = {
       buildingName: buildingData.name,
       buildingIndex: index,
       isBuilding: true,
       originalColor: buildingData.color,
-      originalScale: 1
+      originalScale: 1,
     };
 
     buildingGroup.add(buildingMesh);
 
-    // Add a simple roof
-    const roofGeometry = new THREE.ConeGeometry(width * 0.7, 4, 4);
-    const roofMaterial = new THREE.MeshLambertMaterial({ 
-      color: 0x8B4513,
-      flatShading: true 
+    // Add a roof — inscribed-circle formula keeps pyramid corners flush with building walls.
+    // For a 4-sided cone rotated π/4, each corner is at radius/√2 from center,
+    // so radius = min(width, depth) / √2 ensures corners align with the footprint.
+    const roofRadius = Math.min(width, depth) / Math.sqrt(2);
+    const roofGeometry = new THREE.ConeGeometry(roofRadius, 4, 4);
+    const roofMaterial = new THREE.MeshLambertMaterial({
+      color: 0x8b4513,
+      flatShading: true,
     });
     const roof = new THREE.Mesh(roofGeometry, roofMaterial);
     roof.position.y = height + 2;
@@ -84,7 +87,7 @@ export class Buildings {
 
     // Position the building group
     buildingGroup.position.set(x, 0, z);
-    
+
     // Rotate building to face outward (away from center)
     buildingGroup.lookAt(0, 0, 0);
     buildingGroup.rotateY(Math.PI); // Rotate 180 degrees to face outward
@@ -96,26 +99,25 @@ export class Buildings {
    * Add simple window details to buildings
    */
   addWindows(buildingGroup, width, height, depth, buildingColor) {
-    const windowMaterial = new THREE.MeshBasicMaterial({ 
-      color: 0xFFFFAA,
-      emissive: 0xFFFFAA,
-      emissiveIntensity: 0.3
-    });
-
     // Front-facing windows
     const rows = Math.floor(height / 4);
     const cols = 3;
 
+    // Share geometry and material across all windows for this building
+    const windowGeometry = new THREE.PlaneGeometry(1, 1.5);
+    const windowMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffffaa,
+    });
+
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
-        const windowGeometry = new THREE.PlaneGeometry(1, 1.5);
-        const window = new THREE.Mesh(windowGeometry, windowMaterial);
-        
+        const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
+
         const x = (col - 1) * 2;
         const y = (row + 1) * 4;
-        
-        window.position.set(x, y, depth / 2 + 0.01);
-        buildingGroup.add(window);
+
+        windowMesh.position.set(x, y, depth / 2 + 0.01);
+        buildingGroup.add(windowMesh);
       }
     }
   }
@@ -152,7 +154,7 @@ export class Buildings {
         building.scale.set(
           CONFIG.HIGHLIGHT_SCALE,
           CONFIG.HIGHLIGHT_SCALE,
-          CONFIG.HIGHLIGHT_SCALE
+          CONFIG.HIGHLIGHT_SCALE,
         );
       } else {
         mainMesh.material.emissiveIntensity = 0.1;

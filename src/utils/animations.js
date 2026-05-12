@@ -46,6 +46,7 @@ export class AnimationManager {
     this.rider.animatePedaling(
       Math.abs(this.wheelRotationSpeed) > 0.01,
       isBunnyHopping,
+      deltaTime,
     );
 
     // Sync rider body pose to current trick state

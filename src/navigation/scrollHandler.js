@@ -65,9 +65,9 @@ export class ScrollHandler {
 
     // Map PageDown/PageUp to snapping between buildings
     if (event.key === "PageDown") {
-      // Move to next building index
-      // const nextIndex = (this.navigation.getCurrentBuildingIndex() + 1) % this.navigation.buildings.getBuildings().length;
-      const nextIndex = this.navigation.getCurrentBuildingIndex() + 1;
+      // Move to next building index (wrap around)
+      const count = this.navigation.buildings.getBuildings().length;
+      const nextIndex = (this.navigation.getCurrentBuildingIndex() + 1) % count;
       this.navigation.snapToBuilding(nextIndex);
       event.preventDefault();
     } else if (event.key === "PageUp") {

@@ -154,14 +154,18 @@ export class Rider {
 
   /**
    * Animate pedaling motion
+   * @param {boolean} isMoving
+   * @param {boolean} isBunnyHopping
+   * @param {number} deltaTime - seconds since last frame
    */
-  animatePedaling(isMoving, isBunnyHopping = false) {
+  animatePedaling(isMoving, isBunnyHopping = false, deltaTime = 0) {
     if (!isMoving || isBunnyHopping) return;
 
     // Let updateTrick handle legs for tricks that use them
     if (this.trickState === "superman" || this.trickState === "cancan") return;
 
-    this.animationTime += 0.1;
+    // 6 rad/sec pedal cadence, scaled by delta time to be framerate-independent
+    this.animationTime += deltaTime * 6;
 
     if (this.legs.length === 2) {
       // Alternate leg movement (pedaling)
